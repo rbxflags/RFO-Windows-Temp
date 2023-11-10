@@ -280,13 +280,6 @@ int main(int argc, char** argv) {
         return 1;
     }
 
-    const string rfoVersionConstant = "1";
-
-    std::ofstream rfoVerFile;
-    rfoVerFile.open(rootDir + "\\programversion.rfo");
-    rfoVerFile << rfoVersionConstant+"\n";
-    rfoVerFile.close();
-
     if (std::filesystem::exists(rootDir + "\\animegirl.ico") == false) {
         FILE* file;
         if (fopen_s(&file, (rootDir + "\\animegirl.ico").c_str(), "wb") != 0) {
@@ -333,55 +326,6 @@ int main(int argc, char** argv) {
         isEnabledFile << "f";
         isEnabledFile.close();
     }
-
-    //Check for program updates
-    string storedRfoVersion;
-
-    std::ifstream rfoVersionFile(rootDir + "\\programversion.rfo");
-    rfoVersionFile.seekg(0, std::ios::end);
-    size_t size = rfoVersionFile.tellg();
-    string buffer(size, ' ');
-    rfoVersionFile.seekg(0);
-    rfoVersionFile.read(&buffer[0], size);
-    storedRfoVersion = buffer;
-    rfoVersionFile.close();
-
-    std::string rfoVersionStr;
-    CURL* reqUpd = curl_easy_init();
-    CURLcode resUpd;
-    curl_easy_setopt(reqUpd, CURLOPT_URL, "https://raw.githubusercontent.com/rbxflags/RFO-Windows-Temp/main/programversion.rfo");
-    curl_easy_setopt(reqUpd, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_2TLS); // add HTTP/2 support for speed gains
-    curl_easy_setopt(reqUpd, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1_2); // force TLSv1.2 support as HTTP/2 requires it
-    curl_easy_setopt(reqUpd, CURLOPT_WRITEFUNCTION, WriteCallback);
-    curl_easy_setopt(reqUpd, CURLOPT_WRITEDATA, &rfoVersionStr);
-    resUpd = curl_easy_perform(reqUpd);
-    if (resUpd != CURLE_OK) {
-        curl_easy_cleanup(reqUpd);
-        std::cout << "\nNETWORK ERROR | FAILED TO CHECK FOR PROGRAM UPDATES | 0xC | RFO can still continue, but you may encounter issues, press enter to continue anyways...\n";
-        std::cin.get();
-        goto skipUpdate;
-    }
-    curl_easy_cleanup(reqUpd);
-
-    if ((rfoVersionStr + ' ') != storedRfoVersion) {
-        std::cout << rfoVersionStr << "\n";
-        std::cout << storedRfoVersion << "\n";
-        //CreateProcess code from https://stackoverflow.com/a/15440094
-
-        STARTUPINFOA si;
-        PROCESS_INFORMATION pi;
-
-        ZeroMemory(&si, sizeof(si));
-        si.cb = sizeof(si);
-        ZeroMemory(&pi, sizeof(pi));
-
-        CreateProcessA((rootDir + "\\RFO2Installer.exe").c_str(), argv[1], NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi);
-        CloseHandle(pi.hProcess);
-        CloseHandle(pi.hThread);
-        exit(0);
-    }
-
-    skipUpdate:
 
     if (std::filesystem::exists(robloxVersionFolder) == true && std::filesystem::exists(localRobloxVersionFolder) == true) {
         std::cout << "Detected two Roblox installs at once, please delete either " + robloxVersionFolder + " or " + localRobloxVersionFolder;
