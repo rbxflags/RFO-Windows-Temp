@@ -160,9 +160,9 @@ void mainThread() {
         std::string robloxVersionStr;
         CURL* req = curl_easy_init();
         CURLcode res;
-        curl_easy_setopt(req, CURLOPT_URL, "https://setup.rbxcdn.com/version"); // an actually secure version endpoint...
-        curl_easy_setopt(req, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_2TLS); // add HTTP/2 support for speed gains
-        curl_easy_setopt(req, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1_2); // force TLSv1.2 support as HTTP/2 requires it
+        curl_easy_setopt(req, CURLOPT_URL, "https://setup.rbxcdn.com/version");
+        curl_easy_setopt(req, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_2TLS);
+        curl_easy_setopt(req, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1_2);
         curl_easy_setopt(req, CURLOPT_WRITEFUNCTION, WriteCallback);
         curl_easy_setopt(req, CURLOPT_WRITEDATA, &robloxVersionStr);
         res = curl_easy_perform(req);
@@ -179,14 +179,14 @@ void mainThread() {
                 if (e.is_directory()) {
                     for (const auto& e2 : std::filesystem::directory_iterator(e)) {
                         if (e2.path().string().ends_with("COPYRIGHT.txt")) {
-                            robloxVersionStr = e.path().string().erase(0,robloxVersionFolder.length()+1);
+                            robloxVersionStr = e.path().string().erase(0, robloxVersionFolder.length() + 1);
                             goto exitNest;
                         }
                     }
                 }
             }
         }
-        exitNest:
+    exitNest:
         //Okay! Lets see if the flag list needs to be updated...
         string storedFflagVersion;
 
@@ -203,8 +203,8 @@ void mainThread() {
         CURL* req2 = curl_easy_init();
         CURLcode res2;
         curl_easy_setopt(req2, CURLOPT_URL, "https://raw.githubusercontent.com/rbxflags/RFO-Windows-Temp/main/flagversion.rfo");
-        curl_easy_setopt(req2, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_2TLS); // add HTTP/2 support for speed gains
-        curl_easy_setopt(req2, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1_2); // force TLSv1.2 support as HTTP/2 requires it
+        curl_easy_setopt(req2, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_2TLS);
+        curl_easy_setopt(req2, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1_2);
         curl_easy_setopt(req2, CURLOPT_WRITEFUNCTION, WriteCallback);
         curl_easy_setopt(req2, CURLOPT_WRITEDATA, &latestFflagVersion);
         res2 = curl_easy_perform(req2);
@@ -226,8 +226,8 @@ void mainThread() {
             CURL* req3 = curl_easy_init();
             CURLcode res2;
             curl_easy_setopt(req3, CURLOPT_URL, "https://raw.githubusercontent.com/rbxflags/Flags/main/ClientAppSettings.json");
-            curl_easy_setopt(req3, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_2TLS); // add HTTP/2 support for speed gains
-            curl_easy_setopt(req3, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1_2); // force TLSv1.2 support as HTTP/2 requires it
+            curl_easy_setopt(req3, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_2TLS);
+            curl_easy_setopt(req3, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1_2);
             curl_easy_setopt(req3, CURLOPT_WRITEFUNCTION, WriteCallback);
             curl_easy_setopt(req3, CURLOPT_WRITEDATA, &latestFflagList);
             res2 = curl_easy_perform(req3);
@@ -291,8 +291,8 @@ int main(int argc, char** argv) {
         CURL* req = curl_easy_init();
         CURLcode res;
         curl_easy_setopt(req, CURLOPT_URL, "https://raw.githubusercontent.com/rbxflags/RFO-Windows-Temp/main/animegirl.ico");
-        curl_easy_setopt(req, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_2TLS); // add HTTP/2 support for speed gains
-        curl_easy_setopt(req, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1_2); // force TLSv1.2 support as HTTP/2 requires it
+        curl_easy_setopt(req, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_2TLS);
+        curl_easy_setopt(req, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1_2);
         curl_easy_setopt(req, CURLOPT_WRITEFUNCTION, NULL);
         curl_easy_setopt(req, CURLOPT_WRITEDATA, file);
         res = curl_easy_perform(req);
@@ -350,8 +350,8 @@ int main(int argc, char** argv) {
     //Set Hidden and Enabled based on saved file
     std::ifstream hiddenFile(rootDir + "\\isHidden.rfo");
     hiddenFile.seekg(0, std::ios::end);
-    size = hiddenFile.tellg();
-    buffer = string(size, ' ');
+    size_t size = hiddenFile.tellg();
+    string buffer = string(size, ' ');
     hiddenFile.seekg(0);
     hiddenFile.read(&buffer[0], size);
     if (buffer == "t") {
@@ -402,9 +402,9 @@ int main(int argc, char** argv) {
             std::string robloxVersionStr;
             CURL* req = curl_easy_init();
             CURLcode res;
-            curl_easy_setopt(req, CURLOPT_URL, "https://setup.rbxcdn.com/version"); // an actually secure version endpoint...
-            curl_easy_setopt(req, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_2TLS); // add HTTP/2 support for speed gains
-            curl_easy_setopt(req, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1_2); // force TLSv1.2 support as HTTP/2 requires it
+            curl_easy_setopt(req, CURLOPT_URL, "https://setup.rbxcdn.com/version");
+            curl_easy_setopt(req, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_2TLS);
+            curl_easy_setopt(req, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1_2);
             curl_easy_setopt(req, CURLOPT_WRITEFUNCTION, WriteCallback);
             curl_easy_setopt(req, CURLOPT_WRITEDATA, &robloxVersionStr);
             res = curl_easy_perform(req);
