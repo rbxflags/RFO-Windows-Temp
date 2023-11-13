@@ -413,6 +413,19 @@ int main(int argc, char** argv) {
                     std::cout << "\nNETWORK ERROR | FAILED TO REMOVE FFLAG LIST, DELETE MANUALLY AT " + robloxVersionFolder + "\\current-roblox-version\\ClientSettings\\ClientAppSettings.json | 0x9\n";
             }
             curl_easy_cleanup(req);
+            if (std::filesystem::exists(robloxVersionFolder + "\\" + robloxVersionStr) == false) {
+                for (const auto& e : std::filesystem::directory_iterator(robloxVersionFolder)) {
+                    if (e.is_directory()) {
+                        for (const auto& e2 : std::filesystem::directory_iterator(e)) {
+                            if (e2.path().string().ends_with("COPYRIGHT.txt")) {
+                                robloxVersionStr = e.path().string().erase(0, robloxVersionFolder.length() + 1);
+                                goto exitNest2;
+                            }
+                        }
+                    }
+                }
+            }
+        exitNest2:
             if (std::filesystem::exists(robloxVersionFolder + "\\" + robloxVersionStr + "\\ClientSettings\\ClientAppSettings.json") == true) {
                 remove((robloxVersionFolder + "\\" + robloxVersionStr + "\\ClientSettings\\ClientAppSettings.json").c_str());
             }
