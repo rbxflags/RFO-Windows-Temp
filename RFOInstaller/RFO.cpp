@@ -4,11 +4,11 @@
 #include <curl/curl.h>
 
 int main(int argc, char* argv[]) {
-	std::string userIn;
-	std::cout << "Welcome to the RFO Installer/Updater!\nRFO is made, owned, and developed by Kaede and Expo\n\nType \"install\" and press enter to continue!\nType \"uninstall\" and press enter to uninstall :(\n\n";
-	std::cin >> userIn;
+    std::string userIn;
+    std::cout << "Welcome to the RFO Installer/Updater!\nRFO is made, owned, and developed by Kaede and Expo\n\nType \"install\" and press enter to continue!\nType \"uninstall\" and press enter to uninstall :(\n\n";
+    std::cin >> userIn;
 
-    system("taskkill /f /im RFO.exe");
+    system("taskkill /f /im RFO.exe >nul 2>&1");
 
     std::string rootDir("C:\\Program Files (x86)\\RFO");
 
@@ -43,7 +43,7 @@ int main(int argc, char* argv[]) {
 
         HKEY hKey;
         if (RegOpenKeyExA(HKEY_CURRENT_USER, "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", 0, KEY_ALL_ACCESS, &hKey) == ERROR_SUCCESS) {
-            RegSetValueExA(hKey, "RFO", 0, REG_SZ, (const BYTE*)(rootDir + "\\RFO.exe").c_str(),36);
+            RegSetValueExA(hKey, "RFO", 0, REG_SZ, (const BYTE*)(rootDir + "\\RFO.exe").c_str(), 36);
             RegCloseKey(hKey);
         }
         else {
@@ -64,9 +64,9 @@ int main(int argc, char* argv[]) {
 
         std::cout << "\RFO has been successfully installed...\nClosing this installer in 5 seconds...\n\n";
         std::this_thread::sleep_for(std::chrono::milliseconds(5000));
-	}
+    }
     else if (userIn == std::string("uninstall")) { // Uninstall
-        if (argv[0] == (rootDir+"\\RFOInstaller.exe").c_str()) {
+        if (argv[0] == (rootDir + "\\RFOInstaller.exe").c_str()) {
             std::cout << "To uninstall, please run the installer outside of this updater, you can redownload this installer on the github.\nClosing in 5 seconds.\n";
             std::this_thread::sleep_for(std::chrono::milliseconds(5000));
             return 0;
@@ -89,6 +89,6 @@ int main(int argc, char* argv[]) {
         }
         std::cout << "\RFO has been successfully uninstalled...\nClosing this installer in 5 seconds...\n\n";
         std::this_thread::sleep_for(std::chrono::milliseconds(5000));
-	}
+    }
     return 0;
 }
